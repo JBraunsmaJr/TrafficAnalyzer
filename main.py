@@ -7,6 +7,10 @@ def main():
     config = analyzer_cli()
     analyzer = BasicAnalyzer(config)
 
+    if os.path.exists(f"{config.session_name}.gv") and config.render_only:
+        analyzer.display_as_static_graph()
+        exit(0)
+
     if os.path.isdir(config.path):
         for file in os.listdir(config.path):
             if file.endswith(".pcap"):

@@ -17,6 +17,7 @@ class AnalyzerConfig:
         self.render_labels: dict = dict()
         self.session_name: str = None
         self.path: str = None
+        self.render_only: bool = False
 
 
 def consume_args(args) -> AnalyzerConfig:
@@ -39,6 +40,12 @@ def consume_args(args) -> AnalyzerConfig:
     else:
         print(f"{args.path} could not be located")
         exit(1)
+
+    if args.name:
+        config.session_name = args.name
+
+    if args.render_only:
+        config.render_only = args.render_only
 
     # Parse through CLI labels (if applicable)
     for entry in args.label if args.label else []:
@@ -159,5 +166,9 @@ def analyzer_cli():
                              "\t\tcolor -> visual color to use when IP meets target criteria\n"
                              "\t\tshape -> shape to render on graph (default is ellipse)\n"
                              "\t\ttarget -> IP prefix / range / CIDR")
+
+    parser.add_argument("--render-only", action="store_true", help="Only render output (or from saved file)")
+    parser.add_argument("--name", default="TrafficAnalyzer", help="Name of session. Used for session "
+                                                                  "identification purposes")
 
     return consume_args(parser.parse_args())
