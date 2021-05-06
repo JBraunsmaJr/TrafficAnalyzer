@@ -1,36 +1,41 @@
-import pydotplus
-from TrafficItem import TrafficItem
+from models.TrafficItem import TrafficItem
+from ArgumentParser import AnalyzerConfig
+from graphviz import Digraph
 
+class Renderer:
+    def __init__(self, config: AnalyzerConfig):
+        self._edges: dict = dict()
+        self._nodes: dict = dict()
+        self._graph: Digraph = Digraph(config.session_name)
+        self._config: AnalyzerConfig = config
 
-def render(ipmap_dict, name):
-    # argument type checks
-    if not isinstance(ipmap_dict, dict):
-        print("Render requires an argument of type 'dict'")
-        exit(1)
+    def add_traffic(self, traffic: TrafficItem):
+        """
+        Adds visual representation of instance to graph
+        :param traffic:
+        :return:
+        """
+        if not traffic:
+            return
 
-    if not isinstance(name, str):
-        print("Name requires an argument of type 'str'")
-        exit(1)
+        if not self._nodes.get(traffic.source, False):
+            self._nodes[traffic.source] = True
+            self._graph.node(traffic.source,
+                             label=traffic.source_host_name if traffic.source_host_name
+                             else traffic.source)
 
-    g = pydotplus.Dot()
+        if not self._nodes.get(traffic.destination, False):
+            self._nodes[traffic.destination] = True
+            self._graph.node(traffic.destination,
+                             label=traffic.destination_host_name if
+                             traffic.destination_host_name else traffic.destination)
 
-    nodes = {}
-    edges = {}
+        if not self._edges.get(traffic.id, False):
+            self._graph.edge(traffic.source, traffic.destination)
+            self._edges[traffic.id] = True
 
-    for item in ipmap_dict.items():
-        if not isinstance(item, TrafficItem):
-            continue
-
-        if not nodes.get(item.source, None):
-            nodes[item.source] = g.node(item.source,
-                                        label=item.source_name if item.source_name else item.source)
-
-        if not nodes.get(item.destination, None):
-            nodes[item.destination] = g.node(item.destination,
-                                             label=item.destination_name if item.destination_name else item.destination)
-
-        key = f"{item.source} {item.destination}"
-        if not edges.get(key, None):
-            edges[key] = g.edge(item.source, item.destination, label=f"{item.counter}")
-
-    g.write("test.png", format="png")
+    def render(self):
+        """
+        Outputs current graph to PNG
+        """
+        self._graph.render(view=True)

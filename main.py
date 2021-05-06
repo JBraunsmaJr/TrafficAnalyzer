@@ -1,25 +1,21 @@
-from TrafficAnalyzer import TrafficAnalyzer
-import argparse
+from analyzers.BasicAnalyzer import BasicAnalyzer
+from ArgumentParser import analyzer_cli
 import os
 
 
-def main(file):
-    analyzer = TrafficAnalyzer()
-    analyzer.parse_pcap(file, display_text=True)
+def main():
+    config = analyzer_cli()
+    analyzer = BasicAnalyzer(config)
+
+    if os.path.isdir(config.path):
+        for file in os.listdir(config.path):
+            if file.endswith(".pcap"):
+                analyzer.parse_file(os.path.join(config.path, file))
+    elif os.path.isfile(config.path):
+        analyzer.parse_file(config.path)
+
+    analyzer.display_as_static_graph()
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Analyze Traffic via PCAP files and display basic metrics")
-    parser.add_argument("file", help="Path to PCAP file to process")
-    args = parser.parse_args()
-
-    # argument validation
-    if not args.file:
-        print("Requires pcap_file to process")
-        exit(1)
-
-    if not os.path.exists(args.file):
-        print(f"PCAP File: {args.file} does not exist")
-        exit(1)
-
-    main(args.file)
+    main()
