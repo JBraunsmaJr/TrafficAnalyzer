@@ -8,6 +8,7 @@ class Node:
                  inputs=[], outputs=[]):
         self.scene = scene
         self.title = title
+        self._id = id
 
         self.content = NodeContentWidget()
         self.graphicsNode = QGraphicsNode(self)
@@ -31,6 +32,19 @@ class Node:
             counter += 1
             self.outputs.append(socket)
 
+    @property
+    def id(self):
+        return self._id
+
+    @id.setter
+    def id(self, value):
+        self._id = value
+
+    def updateConnectedEdges(self):
+        for socket in self.inputs + self.outputs:
+            if socket.hasEdge():
+                socket.edge.updatePositions()
+
     def getSocketPosition(self, index, position):
         x = 0 if position in (LEFT_TOP, LEFT_BOTTOM) else self.graphicsNode.width
 
@@ -43,4 +57,19 @@ class Node:
             y = self.graphicsNode.title_height + self.graphicsNode._padding + \
                 self.graphicsNode.edge_size + index * self.socket_spacing
 
-        return x, y
+        return [x, y]
+
+    @property
+    def position(self):
+        """
+        Returns position as QPointF
+        """
+        return self.graphicsNode.pos()
+
+    def setPosition(self,x, y):
+        """
+        Sets position to desired coordinates
+        :param x:
+        :param y:
+        """
+        self.graphicsNode.setPos(x, y)

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 
 from analyzers.BasicAnalyzer import BasicAnalyzer
 from models.TrafficItem import TrafficItem
+from ui.edges.Edge import Edge
 from ui.views.GraphicsView import QAppGraphicsView
 from ui.scenes.Scene import Scene
 from ui.nodes.Node import Node
@@ -34,6 +35,13 @@ class AppWindow(QWidget):
         node = Node(self.scene, "Something Crazy",
                     inputs=[1,2,3],
                     outputs=[1])
+
+        node2 = Node(self.scene, "Meow Meow",
+                     inputs=[1])
+
+        node2.setPosition(300, 100)
+
+        edge1 = Edge(self.scene, node.outputs[0], node2.inputs[0])
 
         self.view = QAppGraphicsView(self.scene.graphicsScene, self)
         self.layout.addWidget(self.view)
