@@ -1,7 +1,6 @@
 from models.TrafficItem import TrafficItem
-from ArgumentParser import AnalyzerConfig
+from analyzers.ArgumentParser import AnalyzerConfig
 from graphviz import Digraph
-from models.RenderRule import RenderRule
 
 
 class Renderer:

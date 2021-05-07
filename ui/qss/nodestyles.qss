@@ -1,0 +1,12 @@
+NodeContentWidget, QTextEdit {
+  background: transparent;
+}
+
+QTextEdit {
+  color: white;
+  border: 0;
+}
+
+NodeContentWidget QLabel {
+  color: #e0e0e0;
+}

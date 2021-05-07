@@ -1,7 +1,7 @@
 from analyzers.BaseAnalyzer import BaseAnalyzer
 from models.TrafficItem import TrafficItem
 from Renderer import Renderer
-from ArgumentParser import AnalyzerConfig
+from analyzers.ArgumentParser import AnalyzerConfig
 import dpkt
 import socket
 import os

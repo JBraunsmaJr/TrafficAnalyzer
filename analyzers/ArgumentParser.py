@@ -18,6 +18,7 @@ class AnalyzerConfig:
         self.session_name: str = None
         self.path: str = None
         self.render_only: bool = False
+        self.use_app: bool = False
 
 
 def consume_args(args) -> AnalyzerConfig:
@@ -27,6 +28,9 @@ def consume_args(args) -> AnalyzerConfig:
     :return: AnalyzerConfig with populated values
     """
     config = AnalyzerConfig()
+
+    if args.use_app:
+        config.use_app = True
 
     if not args.path:
         if os.environ["TEST_PCAP"]:
@@ -170,5 +174,7 @@ def analyzer_cli():
     parser.add_argument("--render-only", action="store_true", help="Only render output (or from saved file)")
     parser.add_argument("--name", default="TrafficAnalyzer", help="Name of session. Used for session "
                                                                   "identification purposes")
+
+    parser.add_argument("--use_app", action="store_true", help="Display Interactive Application")
 
     return consume_args(parser.parse_args())

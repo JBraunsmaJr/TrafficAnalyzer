@@ -1,6 +1,12 @@
+import sys
+
+from PyQt5.QtWidgets import QApplication
+
 from analyzers.BasicAnalyzer import BasicAnalyzer
-from ArgumentParser import analyzer_cli
+from analyzers.ArgumentParser import analyzer_cli
 import os
+
+from ui.AppWindow import AppWindow
 
 
 def main():
@@ -18,7 +24,11 @@ def main():
     elif os.path.isfile(config.path):
         analyzer.parse_file(config.path)
 
-    analyzer.display_as_static_graph()
+    if config.use_app:
+        app = QApplication([])
+        window = AppWindow()
+        window.consumePCAPResults(analyzer)
+        sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
