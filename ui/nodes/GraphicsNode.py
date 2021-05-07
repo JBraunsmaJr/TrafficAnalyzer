@@ -28,6 +28,7 @@ class QGraphicsNode(QGraphicsItem):
         self.initTitle()
         self.title = self.node.title
 
+        self.initSockets()
         self.initContent()
         self.initUI()
 
@@ -50,8 +51,8 @@ class QGraphicsNode(QGraphicsItem):
         return QRectF(
             0,
             0,
-            2 * self.edge_size + self.width,
-            2 * self.edge_size + self.height
+            self.width,
+            self.height
         ).normalized()
 
     def initUI(self):
@@ -67,6 +68,9 @@ class QGraphicsNode(QGraphicsItem):
             self.width
             - 2 * self._padding
         )
+
+    def initSockets(self):
+        pass
 
     @property
     def title(self):

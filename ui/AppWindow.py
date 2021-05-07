@@ -31,7 +31,9 @@ class AppWindow(QWidget):
         self.setLayout(self.layout)
 
         self.scene = Scene()
-        node = Node(self.scene, "Something Crazy")
+        node = Node(self.scene, "Something Crazy",
+                    inputs=[1,2,3],
+                    outputs=[1])
 
         self.view = QAppGraphicsView(self.scene.graphicsScene, self)
         self.layout.addWidget(self.view)
