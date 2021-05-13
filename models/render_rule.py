@@ -1,4 +1,4 @@
-from .SerializableObject import SerializableObject
+from .serializable_object import SerializableObject
 
 
 class RenderRule(SerializableObject):
@@ -15,16 +15,13 @@ class RenderRule(SerializableObject):
         """
 
         if not isinstance(prefix, str):
-            print("RenderRule: prefix must be of type string")
-            exit(1)
+            raise TypeError("RenderRule: prefix must be of type string")
 
         if not isinstance(shape, str):
-            print("RenderRule: shape must be of type string")
-            exit(1)
+            raise TypeError("RenderRule: shape must be of type string")
 
         if not isinstance(color, str):
-            print("RenderRule: color must be of type string")
-            exit(1)
+            raise TypeError("RenderRule: color must be of type string")
 
         self._prefix = prefix
         self._shape = shape

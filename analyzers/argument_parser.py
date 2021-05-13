@@ -1,8 +1,8 @@
 import os
 import argparse
 import json
-from models.FlagRule import FlagRule
-from models.RenderRule import RenderRule
+from models.flag_rule import FlagRule
+from models.render_rule import RenderRule
 
 
 class AnalyzerConfig:
@@ -36,14 +36,12 @@ def consume_args(args) -> AnalyzerConfig:
         if os.environ["TEST_PCAP"]:
             args.path = os.environ["TEST_PCAP"]
         else:
-            print("Traffic Analyzer requires a PCAP file, or directory of PCAPS")
-            exit(1)
+            raise ValueError("Traffic Analyzer requires a PCAP file, or directory of PCAPS")
 
     if os.path.isdir(args.path) or os.path.isfile(args.path):
         config.path = args.path
     else:
-        print(f"{args.path} could not be located")
-        exit(1)
+        raise FileNotFoundError(f"{args.path} could not be located")
 
     if args.name:
         config.session_name = args.name
@@ -126,8 +124,7 @@ def consume_args(args) -> AnalyzerConfig:
                 for item in config_json["flags"] if config_json["flags"] else []:
                     config.render_flags.append(FlagRule(item["origin"], item["destination"], item["color"]))
         except Exception as ex:
-            print(f"Issue loading JSON config file: {args.config}", ex)
-            exit(1)
+            raise ValueError(f"Issue loading JSON config file: {args.config}, {ex}")
 
     # if the user flagged to save arguments
     if args.save:

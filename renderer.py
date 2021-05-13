@@ -1,5 +1,5 @@
-from models.TrafficItem import TrafficItem
-from analyzers.ArgumentParser import AnalyzerConfig
+from models.traffic_item import TrafficItem
+from analyzers.argument_parser import AnalyzerConfig
 from graphviz import Digraph
 
 
@@ -12,8 +12,7 @@ class Renderer:
 
     def get_rule(self, address: str):
         if not isinstance(address, str):
-            print(f"Renderer.get_rule: address must be of type string")
-            exit(1)
+            raise TypeError(f"Renderer.get_rule: address must be of type string")
 
         for rule in self._config.render_rules.values():
             if rule.matches(address):

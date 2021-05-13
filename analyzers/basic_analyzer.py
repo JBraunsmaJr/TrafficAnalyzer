@@ -1,7 +1,7 @@
-from analyzers.BaseAnalyzer import BaseAnalyzer
-from models.TrafficItem import TrafficItem
-from Renderer import Renderer
-from analyzers.ArgumentParser import AnalyzerConfig
+from analyzers.base_analyzer import BaseAnalyzer
+from models.traffic_item import TrafficItem
+from renderer import Renderer
+from analyzers.argument_parser import AnalyzerConfig
 import dpkt
 import socket
 import os
@@ -36,12 +36,10 @@ class BasicAnalyzer(BaseAnalyzer):
     def parse_file(self, file: str):
         # argument validation
         if not isinstance(file, str):
-            print(f"BasicAnalyzer.parse_false: {file}  - file must be of type string")
-            exit(1)
+            raise TypeError(f"BasicAnalyzer.parse_false: {file}  - file must be of type string")
 
         if not os.path.exists(file):
-            print(f"BasicAnalyzer.parse_file: {file} does not exist")
-            exit(1)
+            raise FileNotFoundError(f"BasicAnalyzer.parse_file: {file} does not exist")
 
         # pcap files must be read as binary when using dpkt
         with open(file, "rb") as pcap:
@@ -85,7 +83,8 @@ class BasicAnalyzer(BaseAnalyzer):
                 self._renderer.add_traffic(item)
 
     def display_as_text(self):
-        pass
+        for ip, item in self.ip_map.items():
+            print(item)
 
     def display_as_static_graph(self):
         self._renderer.render()

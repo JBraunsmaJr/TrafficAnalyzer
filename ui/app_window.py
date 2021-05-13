@@ -2,12 +2,12 @@ from PyQt5.QtCore import QFile
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import *
 
-from analyzers.BasicAnalyzer import BasicAnalyzer
-from models.TrafficItem import TrafficItem
-from ui.edges.Edge import Edge
-from ui.views.GraphicsView import QAppGraphicsView
-from ui.scenes.Scene import Scene
-from ui.nodes.Node import Node
+from analyzers.basic_analyzer import BasicAnalyzer
+from models.traffic_item import TrafficItem
+from ui.edges.edge import Edge
+from ui.views.graphics_view import QAppGraphicsView
+from ui.scenes.scene import Scene
+from ui.nodes.node import Node
 import os
 
 

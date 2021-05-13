@@ -62,8 +62,7 @@ class BaseAnalyzer(metaclass=abc.ABCMeta):
         :return: Resolved domain (if found) otherwise none
         """
         if not isinstance(ip_address, str):
-            print(f"BasicAnalyzer.resolve_domain: ip_address must be of type string")
-            exit(1)
+            raise TypeError(f"BasicAnalyzer.resolve_domain: ip_address must be of type string")
 
         if ip_address in self._failed_dns:
             return None

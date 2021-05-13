@@ -1,5 +1,5 @@
-from .SerializableObject import SerializableObject
-from .TrafficItem import TrafficItem
+from .serializable_object import SerializableObject
+from .traffic_item import TrafficItem
 
 
 class FlagRule(SerializableObject):
@@ -14,20 +14,16 @@ class FlagRule(SerializableObject):
         :param color: Communication line will be colored this color (if criteria is met)
         """
         if not origin_ip or not destination_ips or not color:
-            print("FlagRule: origin_ip, destination_ips, and color arguments are requried")
-            exit(1)
+            raise ValueError("FlagRule: origin_ip, destination_ips, and color arguments are requried")
 
         if not isinstance(origin_ip, list):
-            print("FlagRule: origin_ip must be of type list")
-            exit(1)
+            raise TypeError("FlagRule: origin_ip must be of type list")
 
         if not isinstance(destination_ips, list):
-            print("FlagRule: destination_ips must be of type list (array of strings)")
-            exit(1)
+            raise TypeError("FlagRule: destination_ips must be of type list (array of strings)")
 
         if not isinstance(color, str):
-            print("FlagRule: color must be of type string")
-            exit(1)
+            raise TypeError("FlagRule: color must be of type string")
 
         self._origin = origin_ip
         self._destinations = destination_ips

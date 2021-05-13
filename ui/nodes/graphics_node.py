@@ -32,6 +32,23 @@ class QGraphicsNode(QGraphicsItem):
         self.initContent()
         self.initUI()
 
+        self.wasMoved = False
+
+    def mouseMoveEvent(self, event):
+        super().mouseMoveEvent(event)
+
+        # optimize me -- just update selected nodes
+        for node in self.scene().scene.nodes:
+            if node.graphicsNode.isSelected():
+                node.updateConnectedEdges()
+        self.wasMoved = True
+
+    def mouseReleaseEvent(self, event: 'QGraphicsSceneMouseEvent') -> None:
+        super().mouseMoveEvent(event)
+
+        if self.wasMoved:
+            self.wasMoved = False
+
     @property
     def title(self):
         return self._title
@@ -68,6 +85,13 @@ class QGraphicsNode(QGraphicsItem):
             self.width
             - 2 * self._padding
         )
+
+    def initContent(self):
+        self.graphicsContent = QGraphicsProxyWidget(self)
+        self.content.setGeometry(self.edge_size, self.title_height + self.edge_size,
+                                 self.width - 2 * self.edge_size,
+                                 self.height - 2 * self.edge_size - self.title_height)
+        self.graphicsContent.setWidget(self.content)
 
     def initSockets(self):
         pass

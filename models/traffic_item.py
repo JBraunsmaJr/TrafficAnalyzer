@@ -11,20 +11,16 @@ class TrafficItem:
                  destination_name: str = None):
 
         if not isinstance(source, str):
-            print(f"Source: {source} -- must be of type string")
-            exit(1)
+            raise TypeError(f"Source: {source} -- must be of type string")
 
         if not isinstance(destination, str):
-            print(f"Destination: {destination} -- must be of type string")
-            exit(1)
+            raise TypeError(f"Destination: {destination} -- must be of type string")
 
         if source_name and not isinstance(source_name, str):
-            print(f"Source Name: {source_name} must be of type string")
-            exit(1)
+            raise TypeError(f"Source Name: {source_name} must be of type string")
 
         if destination_name and not isinstance(destination_name, str):
-            print(f"Destination Name: {destination_name} must be of type string")
-            exit(1)
+            raise TypeError(f"Destination Name: {destination_name} must be of type string")
 
         self._source = source
         self._destination = destination
@@ -137,8 +133,7 @@ class TrafficItem:
         """
         # validation check
         if not isinstance(protocol, str):
-            print(f"TrafficItem.add_protocol: protocol must be of type string")
-            exit(1)
+            raise TypeError(f"TrafficItem.add_protocol: protocol must be of type string")
 
         if self._protocols.get(protocol, None):
             self._protocols[protocol] += 1

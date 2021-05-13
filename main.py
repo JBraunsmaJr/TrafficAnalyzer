@@ -2,11 +2,11 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from analyzers.BasicAnalyzer import BasicAnalyzer
-from analyzers.ArgumentParser import analyzer_cli
+from analyzers.basic_analyzer import BasicAnalyzer
+from analyzers.argument_parser import analyzer_cli
 import os
 
-from ui.AppWindow import AppWindow
+from ui.app_window import AppWindow
 
 
 def main():
@@ -29,6 +29,8 @@ def main():
         window = AppWindow()
         window.consumePCAPResults(analyzer)
         sys.exit(app.exec_())
+
+    analyzer.display_as_text()
 
 
 if __name__ == '__main__':
