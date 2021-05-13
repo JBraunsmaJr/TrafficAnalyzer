@@ -50,7 +50,7 @@ def consume_args(args) -> AnalyzerConfig:
         config.render_only = args.render_only
 
     # Parse through CLI labels (if applicable)
-    for entry in args.label if args.label else []:
+    for entry in args.label or []:
         split = entry.split("=")
 
         if len(split) != 2:
@@ -60,7 +60,7 @@ def consume_args(args) -> AnalyzerConfig:
         config.render_labels[split[0]] = split[1]
 
     # Parse through CLI flags (if applicable)
-    for entry in args.flag if args.flag else []:
+    for entry in args.flag or []:
         values = entry.split(",")
 
         if len(values) > 3:
@@ -85,7 +85,7 @@ def consume_args(args) -> AnalyzerConfig:
         config.render_flags.append(FlagRule(origin, destinations, color))
 
     # Parse through CLI rules (if applicable)
-    for entry in args.rule if args.rule else []:
+    for entry in args.rule or []:
         values = split(",")
 
         if len(values) > 3:
@@ -113,15 +113,15 @@ def consume_args(args) -> AnalyzerConfig:
             with open(args.config, "r") as file:
                 config_json = json.load(file)
 
-                for item in config_json["labels"] if config_json["labels"] else []:
+                for item in config_json["labels"] or []:
                     config.render_labels[item["address"]] = item["label"]
 
-                for item in config_json["rules"] if config_json["rules"] else []:
+                for item in config_json["rules"] or []:
                     config.render_rules[item["target"]] = RenderRule(item["target"],
                                                                      item["shape"] if item["shape"] else "ellipse",
                                                                      item["color"] if item["color"] else "black")
 
-                for item in config_json["flags"] if config_json["flags"] else []:
+                for item in config_json["flags"] or []:
                     config.render_flags.append(FlagRule(item["origin"], item["destination"], item["color"]))
         except Exception as ex:
             raise ValueError(f"Issue loading JSON config file: {args.config}, {ex}")
