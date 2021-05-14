@@ -68,11 +68,22 @@ class AppWindow(QWidget):
                 continue
 
             if not self.scene.nodes.get(traffic.source, None):
+                content = {
+                    "header": traffic.source_host_name or "Could not resolve hostname",
+                    "text_body": traffic.source_label or ""
+                }
+
                 node = NodeData(scene=self.scene,
                                 title=traffic.source,
+                                content_data=content,
                                 id=traffic.source)
 
             if not self.scene.nodes.get(traffic.destination, None):
+                content = {
+                    "header": traffic.destination_host_name or "Could not resolve hostname",
+                    "text_body": traffic.destination_label or ""
+                }
                 node = NodeData(scene=self.scene,
                                 title=traffic.destination,
+                                content_data=content,
                                 id=traffic.destination)

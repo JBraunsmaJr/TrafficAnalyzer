@@ -23,7 +23,7 @@ class NodeData(Serializable):
         self.content = NodeContentWidget(self, **content_data)
         self.graphicsNode = TA_GraphicsNode(node_data=self)
 
-        self.scene.addNode(self, id)
+        self.scene.addNode(self, kwargs.pop("id", id))
 
         self.inputs = []
         self.outputs = []

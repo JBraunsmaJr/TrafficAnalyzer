@@ -30,8 +30,6 @@ def main():
         window.consumePCAPResults(analyzer)
         sys.exit(app.exec_())
 
-    analyzer.display_as_text()
-
 
 if __name__ == '__main__':
     main()
