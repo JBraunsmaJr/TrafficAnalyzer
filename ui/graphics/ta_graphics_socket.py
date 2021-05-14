@@ -1,13 +1,14 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+
 from ui.ta_config import SOCKET_COLORS
 
 
 class TA_GraphicsSocket(QGraphicsItem):
-    def __init__(self, socket_data, socket_type=1):
+    def __init__(self, socket_data, socket_type: int =1):
         self.socket_data = socket_data
-        super().__init__(socket_data.node.graphicsNode)
+        super().__init__(socket_data.node_data.graphicsNode)
 
         self.radius = 6.0
         self.outline_width = 1.0
@@ -25,9 +26,6 @@ class TA_GraphicsSocket(QGraphicsItem):
         painter.drawEllipse(-self.radius, -self.radius, 2 * self.radius, 2 * self.radius)
 
     def boundingRect(self) -> QRectF:
-        return QRectF(
-            - self.radius - self.outline_width,
-            - self.radius - self.outline_width,
-            2 * (self.radius + self.outline_width),
-            2 * (self.radius + self.outline_width)
-        )
+        w = -self.radius - self.outline_width
+        h = 2 * (self.radius + self.outline_width)
+        return QRectF(w, w, h, h)

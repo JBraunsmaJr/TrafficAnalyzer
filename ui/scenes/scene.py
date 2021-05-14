@@ -1,8 +1,9 @@
 from collections import OrderedDict
 
 from ui.serializable_ui import Serializable
-from ui.edges.edge import Edge
-from ui.nodes.node import Node
+from ui.data.node_data import NodeData
+from ui.data.edge_data import EdgeData
+import json
 from ui.scenes.app_graphics_scene import QAppGraphicsScene
 import uuid
 
@@ -86,10 +87,10 @@ class Scene(Serializable):
 
         # create nodes
         for node_data in data["nodes"]:
-            Node(self).deserialize(node_data, hashmap, restore_id)
+            NodeData(self).deserialize(node_data, hashmap, restore_id)
 
         # create edges
         for edge_data in data["edges"]:
-            Edge(self).deserialize(edge_data, hashmap, restore_id)
+            EdgeData(self).deserialize(edge_data, hashmap, restore_id)
 
         return True

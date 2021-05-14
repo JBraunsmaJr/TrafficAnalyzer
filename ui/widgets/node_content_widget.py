@@ -8,7 +8,7 @@ from ui.serializable_ui import Serializable
 
 class NodeContentWidget(QWidget, Serializable):
     def __init__(self, node, parent=None):
-        self.node = node
+        self.node_data = node
         super().__init__(parent)
 
         self.initUI()
@@ -19,13 +19,13 @@ class NodeContentWidget(QWidget, Serializable):
         self.setLayout(self.layout)
 
         self.widget_label = QLabel("Some Label Title")
-        self.text_area = TextEdit("Sample Text")
+        self.text_area = QTextEdit("Sample Text")
 
         self.layout.addWidget(self.widget_label)
         self.layout.addWidget(self.text_area)
 
     def setEditingflag(self, value):
-        self.node.scene.graphicsScene.views()[0].editingFlag = value
+        self.node_data.scene.graphicsScene.views()[0].editingFlag = value
 
     def serialize(self):
         return OrderedDict([])

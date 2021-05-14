@@ -1,4 +1,5 @@
 from collections import OrderedDict
+
 from ui.serializable_ui import Serializable
 from ui.graphics.ta_graphics_socket import TA_GraphicsSocket
 
@@ -19,6 +20,14 @@ TOP_LEFT = 12
 
 class SocketData(Serializable):
     def __init__(self, *args, **kwargs):
+        """
+        node_data: (required) Contains node information which this socket is linked to. Must be of type 'NodeData'
+        position: Location of socket on node
+        socket_type: Numeric value indicating which type of socket, which also denotes color
+        multi_edges: boolean value which determines if multiple edges can be linked to this socket
+        index: The identifying place in which this socket is at
+        """
+        # validate required arguments
         if not ("node_data" in kwargs.keys()):
             raise ValueError("SocketData requires node information: 'node_data' -- must be set")
 
@@ -35,6 +44,41 @@ class SocketData(Serializable):
 
         # store other data that we don't necessarily need at this time
         self._data = kwargs
+
+    def __str__(self):
+        return "<Socket %s %s.. %s>" % ("ME" if self.is_multi_edges else "SE", hex(id(self))[2:5], hex(id(self))[-3:])
+
+    def getSocketPosition(self):
+        return self.node_data.getSocketPosition(self.index, self.position)
+
+    def hasEdge(self):
+        """
+        Does this socket have an edge?
+        """
+        return self.edges
+
+    def addEdge(self, edge):
+        """
+        Add edge to socket
+        """
+        self.edges.append(edge)
+
+    def removeEdge(self, edge):
+        """
+        Remove Edge from socket (if applicable)
+        """
+        if edge in self.edges:
+            self.edges.remove(edge)
+        else:
+            print("Socket does not contain", edge)
+
+    def removeAllEdges(self):
+        """
+        Remove all edges from socket
+        """
+        while self.edges:
+            edge = self.edges.pop(0)
+            edge.remove()
 
     def serialize(self):
         return OrderedDict([

@@ -1,32 +1,41 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-
-from ui.nodes.socket import *
 import math
+
+from ui.data.socket_data import *
 
 EDGE_CP_ROUNDNESS = 100
 
 
-class QGraphicsEdge(QGraphicsPathItem):
-    def __init__(self, edge, parent=None):
-        super().__init__(parent)
+class TA_GraphicsEdge(QGraphicsPathItem):
+    def __init__(self, *args, **kwargs):
+        """
+        edge_data: (required) contains information on the edge
+        color: (optional) Default color of line
+        selected_color: (optional) Color of line if selected
+        line_thickness: (optional) Width of line size
+        """
+        super().__init__(kwargs.pop("parent", None))
 
-        self.edge = edge
+        if not ("edge_data" in kwargs.keys()):
+            raise ValueError("TA_GraphicsEdge requires kwarg of 'edge_data' to be defined")
 
-        self._color = QColor("#001000")
-        self._color_selected = QColor("#00ff00")
+        self.edge = kwargs.pop("edge_data")
+        self._color = QColor(kwargs.pop("color", "#001000"))
+        self._color_selected = QColor(kwargs.pop("selected_color", "#00ff00"))
         self._pen = QPen(self._color)
         self._pen_selected = QPen(self._color_selected)
-        self._pen.setWidthF(2.0)
-        self._pen_selected.setWidthF(2.0)
+
+        thickness = kwargs.pop("line_thickness", 2.0)
+        self._pen.setWidthF(thickness)
+        self._pen_selected.setWidthF(thickness)
 
         self.setFlag(QGraphicsItem.ItemIsSelectable)
-
         self.setZValue(-1)
 
         self.posSource = [0, 0]
-        self.posDestination = [200, 100]
+        self.posDestination = [200, 200]
 
     def setSource(self, x, y):
         self.posSource = [x, y]
@@ -34,7 +43,7 @@ class QGraphicsEdge(QGraphicsPathItem):
     def setDestination(self, x, y):
         self.posDestination = [x, y]
 
-    def boundingRect(self):
+    def boundingRect(self) -> QRectF:
         return self.shape().boundingRect()
 
     def shape(self):
@@ -44,7 +53,7 @@ class QGraphicsEdge(QGraphicsPathItem):
         """
         Will handle drawing QPainterPath from two points
         """
-        raise NotImplemented("This method has to be overriden in a child class")
+        raise NotImplementedError("This method has to be overwritten in a child class")
 
     def intersectsWith(self, p1, p2) -> bool:
         """
@@ -57,24 +66,25 @@ class QGraphicsEdge(QGraphicsPathItem):
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         self.setPath(self.calcPath())
-
         painter.setPen(self._pen if not self.isSelected() else self._pen_selected)
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(self.path())
 
     def updatePath(self):
-        """ Will handle drawing QPainterPath from Point A to B """
-        raise NotImplemented("This method has to be overriden in a child class")
+        """
+        Handles drawing QPainter Path from Point A to B
+        """
+        raise NotImplementedError("This method has to be overwritten in a child class")
 
 
-class QGraphicsEdgeDirect(QGraphicsEdge):
+class TA_GraphicsEdgeDirect(TA_GraphicsEdge):
     def calcPath(self):
         path = QPainterPath(QPointF(self.posSource[0], self.posSource[1]))
         path.lineTo(self.posDestination[0], self.posDestination[1])
         self.setPath(path)
 
 
-class QGraphicsEdgeBezier(QGraphicsEdge):
+class TA_GraphicsEdgeBezier(TA_GraphicsEdge):
     def calcPath(self):
         s = self.posSource
         d = self.posDestination
@@ -108,4 +118,3 @@ class QGraphicsEdgeBezier(QGraphicsEdge):
                      self.posDestination[1])
 
         return path
-

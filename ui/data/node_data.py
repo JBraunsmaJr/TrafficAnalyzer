@@ -19,31 +19,31 @@ class NodeData(Serializable):
         self.title = kwargs.pop("title", "Undefined Node")
 
         self.content = NodeContentWidget(self)
-        self.graphicsNode = TA_GraphicsNode(self)
+        self.graphicsNode = TA_GraphicsNode(node_data=self)
 
         self.scene.addNode(self, id)
 
         self.inputs = []
         self.outputs = []
 
-        self.socket_spacing = kwargs("socket_spacing", 22)
+        self.socket_spacing = kwargs.pop("socket_spacing", 22)
 
         counter = 0
         for item in kwargs.pop("inputs", []):
-            socket = SocketData(node=self, index=counter, socket_type=item, position=LEFT_BOTTOM)
+            socket = SocketData(node_data=self, index=counter, socket_type=item, position=LEFT_BOTTOM)
             counter += 1
             self.inputs.append(socket)
 
         counter = 0
         for item in kwargs.pop("outputs", []):
-            socket = SocketData(node=self, index=counter, socket_type=item, position=RIGHT_TOP)
+            socket = SocketData(node_data=self, index=counter, socket_type=item, position=RIGHT_TOP)
             counter += 1
             self.outputs.append(socket)
 
     def updateConnectedEdges(self) -> None:
         for socket in self.inputs + self.outputs:
             if socket.hasEdge():
-                socket.edge.updatePositions()
+                socket.edge_data.updatePositions()
 
     def getSocketPosition(self, index: int, position: int) -> Tuple:
         """
@@ -87,7 +87,7 @@ class NodeData(Serializable):
         """
         Sets position to desired coordinates
         """
-        self.graphicsNode.setPos(x,y)
+        self.graphicsNode.setPos(x, y)
 
     def serialize(self):
         inputs, outputs = [], []
