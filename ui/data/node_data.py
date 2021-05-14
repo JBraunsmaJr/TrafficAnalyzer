@@ -18,7 +18,9 @@ class NodeData(Serializable):
         self.scene = kwargs.pop("scene")
         self.title = kwargs.pop("title", "Undefined Node")
 
-        self.content = NodeContentWidget(self)
+        content_data = kwargs.pop("content_data", {"header": "", "text_body": ""})
+
+        self.content = NodeContentWidget(self, **content_data)
         self.graphicsNode = TA_GraphicsNode(node_data=self)
 
         self.scene.addNode(self, id)
